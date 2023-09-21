@@ -1,0 +1,210 @@
+#!/bin/bash
+set -e
+set -o pipefail
+shopt -s nullglob
+set -u # error if reference uninitialized variable
+
+# GBS pipeline experiment launcher script
+
+pfx=$(echo $0 | sed -e "s/^.*\///" -e "s/\..*$//")
+mainlinks="/vcru_share_t/seq/carrot/gbs/gbslinks"
+notebook="/nas-simonlab/simonlabweb/bioinformatics/up/notebook/0083"
+mastergbskeyfile="/vcru_share_t/box-bioinformatics/keyfiles/MasterGBSKeyFile.txt"
+
+
+
+# 0. Run specific setup
+# manual edit portion 1 of 4 is here:
+readsroot="/vcru_share_t/seq/carrot/gbs"
+cachedir="/dcdata5/tmp/gbscache"
+run1="AHLKHHDMXX"
+run2="BHLK7WDMXX"
+run3=""
+what=$(echo $0 | sed -e 's/.*launch.//' -e 's/.sh//')
+date="20191104"
+minratio=0.975
+maxratio=0.025
+
+
+
+# files based on above configuration
+keyfile="$notebook/${date}${what}keyfile.tsv"
+localdir="/gen/0083/scripts/$pfx.$what.reads"
+notebookdir="notebook/${date}gbs"
+fvcf0="/gen/0083/scripts/02.gbs/$what/$what.filtered.vcf.gz"
+fvcf1="$notebookdir/$what.filtered.1a.vcf.gz"
+fvcf2="$notebookdir/$what.filtered.2a.vcf.gz"
+fvcf3="$notebookdir/$what.filtered.3a.vcf.gz"
+fvcf4pfx="$notebookdir/$what.filtered.4a"
+fvcf4="$fvcf4pfx.vcf.gz"
+fvcf5="$notebookdir/$what.filtered.5a.vcf.gz"
+
+
+
+# Function to assist with creating symlinks
+dosymlink() {
+  old="$1"  # full path
+  new="$2"  # without path
+  if [ ! -e "$old" ]; then
+    echo "Error creating symlink, referenced file \"$old\" does not exist"
+    exit 1
+  fi
+  if [ ! -e "$mainlinks/$new" ]; then
+    echo "\"$mainlinks/$new\" links to \"$old\""
+    ln -s "$old" "$mainlinks/$new"
+  fi
+  if [ ! -e "$localdir/$new" ]; then
+    echo "\"$localdir/$new\" links to \"$mainlinks/$new\""
+    ln -s "$mainlinks/$new" "$localdir/$new"
+  fi
+} # function dosymlink()
+
+
+
+# 1. Initialization - Create directories
+echo "++++ GBS Launcher $0 starting  $(date)"
+if [ ! -d "$localdir" ]; then
+  echo "+++ 1. Creating local read symlink directory \"$localdir\"  $(date)"
+  mkdir "$localdir"
+fi
+if [ ! -d "$cachedir" ]; then
+  echo "+++ 1. Creating gbs cache directory \"$cachedir\"  $(date)"
+  mkdir "$cachedir"
+fi
+
+
+
+# 2. Barcode conversion for paired-end reads for Tassel
+echo "Interleaving reads for Tassel compatibility  $(date)"
+# manual edit portion 2 of 4 is here:
+for r1 in $readsroot/$run1/Box-1_S79_L001_R1_001.fastq.gz \
+          $readsroot/$run2/Box-2_S40_L001_R1_001.fastq.gz \
+          $readsroot/$run2/Box-3_S41_L001_R1_001.fastq.gz \
+          $readsroot/$run2/Box-4_S42_L001_R1_001.fastq.gz \
+          $readsroot/$run2/Box-5_S43_L001_R1_001.fastq.gz \
+          $readsroot/$run2/Box-6_S44_L002_R1_001.fastq.gz \
+          $readsroot/$run2/Box-8_S45_L002_R1_001.fastq.gz
+do
+  if [ ! -s "$r1" ] ; then echo "Missing input file \"$r1\"" ; exit 1 ; fi
+  r2=$(echo $r1 | sed -e 's/_R1_/_R2_/')
+  if [ "$r1" == "$r2" ] ; then echo "Regex failure R2 file \"$r1\"" ; exit 1 ; fi
+  if [ ! -s "$r2" ] ; then echo "Missing input file \"$r2\"" ; exit 1 ; fi
+  ta=$(echo $r1 | sed -e 's/_R1_001/_tassel/')
+  if [ "$r1" == "$ta" ] ; then echo "Regex failure tassel file \"$r1\"" ; exit 1 ; fi
+  if [ ! -s "$ta" ]; then
+    echo "+++ 2. Begin Tassel conversion of \"$ta\"  $(date)"
+
+    # input files
+    r1c=$(bb.cache --filename="$r1" --cachedir="$cachedir")
+    r2c=$(bb.cache --filename="$r2" --cachedir="$cachedir")
+
+    # output files
+    tac="$cachedir/$(basename "$ta")"
+    md5="$cachedir/$(basename "$ta").md5"
+    nasdir=$(dirname $r1)  # permanent storage location
+
+    # use fastest compression here, recompress afterwards with bb.recompress
+    # which takes the majority of the time, so that we can analyze sooner
+    (bb.tassel \
+      --finfile="$r1c" \
+      --rinfile="$r2c" \
+      --outfile="$tactmp" \
+      --gzlevel=1 \
+      --barcode="$barcode1" \
+    && echo "+++ 2. Finished interleaving \"$ta\", recompressing  $(date)" \
+    && zcat "$tactmp" | gzip -9 > "$tac" \
+    && md5sum "$tac" > "$md5" \
+    && cp -pv --no-preserve=owner "$tac" "$md5" "$nasdir"/ \
+    && rm -f "$tactmp" \
+    && echo "+++ 2. Finished recompressing \"$ta\"  $(date)" )&
+  fi
+
+done
+wait
+echo "+++ 2. Tassel conversion done  $(date)"
+
+
+
+# 3. Initialization - Create analysis keyfile
+# manual edit portion 3 of 4 is here:
+if [ ! -s "$keyfile" ]; then
+  echo "+++ 3. Creating keyfile \"$keyfile\"  $(date)"
+  head -n 1 "$mastergbskeyfile" | tr -d '"' | cut -f 1-8 > "$keyfile"
+  grep --text "^$run1" "$mastergbskeyfile" | tr -d '"' | cut -f 1-8 | grep --text "Box1" >> "$keyfile"
+  grep --text "^$run2" "$mastergbskeyfile" | tr -d '"' | cut -f 1-8 | grep --text -v '.0DH' >> "$keyfile"
+fi
+
+
+
+# 4. Symlink creation - Only needed if initial run
+echo "+++ 4. Symlink creation  $(date)"
+# manual edit portion 4 of 4 is here:
+dosymlink "$readsroot/$run1/Box-1_S79_L001_tassel.fastq.gz" "s_${run1}_s_1_fastq.txt.gz"
+dosymlink "$readsroot/$run2/Box-2_S40_L001_tassel.fastq.gz" "s_${run2}_s_1a_fastq.txt.gz"
+dosymlink "$readsroot/$run2/Box-3_S41_L001_tassel.fastq.gz" "s_${run2}_s_1b_fastq.txt.gz"
+dosymlink "$readsroot/$run2/Box-4_S42_L001_tassel.fastq.gz" "s_${run2}_s_1c_fastq.txt.gz"
+dosymlink "$readsroot/$run2/Box-5_S43_L001_tassel.fastq.gz" "s_${run2}_s_1d_fastq.txt.gz"
+dosymlink "$readsroot/$run2/Box-6_S44_L002_tassel.fastq.gz" "s_${run2}_s_2a_fastq.txt.gz"
+dosymlink "$readsroot/$run2/Box-8_S45_L002_tassel.fastq.gz" "s_${run2}_s_2b_fastq.txt.gz"
+
+
+
+# 5. Tassel 5 pipeline launch
+echo "+++ 5. Keyfile \"$keyfile\" contains $(cat $keyfile | wc -l) lines"
+echo "+++ 5. Launching Tassel 5 pipeline 06.tassel-5-pipeline.sh  $(date)"
+# Optional parameters are passed as environment variables:  sortprog enzyme memory startchr endchr
+./02.tassel-5-pipeline.sh \
+  "$what" \
+  "$keyfile" \
+  "$localdir" \
+  "$notebook/${date}gbs"
+
+
+
+# FILTER 1. only 2 alleles (required for beagle)
+if [ ! -s "$fvcf1" ]; then
+  echo "++++ Only 2 alleles, and up to 40% missing (filter 1)  $(date)"
+  vcftools --gzvcf "$fvcf0" --stdout \
+    --min-alleles 2 --max-alleles 2 \
+    --max-missing 0.6 \
+    --out "filter1" \
+    --recode \
+    | bgzip > "$fvcf1"
+fi
+n=$(zcat "$fvcf1" | grep -v '^#' | wc -l)
+echo "Filter 1 $n variants  $(date)"
+
+
+# FILTER 2. Extreme minor allele freq to missing = input for beagle
+if [ ! -s "$fvcf2" ]; then
+  echo "++++ Extreme allele frequencies to missing (filter 2)  $(date)"
+  bb.vcf \
+    --infile="$fvcf1" \
+    --outfile="$fvcf2" \
+    --task=het \
+    --tomissing \
+    --minratio=0.3 \
+    --maxratio=0.7
+fi
+n=$(zcat "$fvcf2" | grep -v '^#' | wc -l)
+echo "Filter 2 $n variants  $(date)"
+
+
+
+# FILTER 3. Notebook page 83 July 15, 2021
+if [ ! -s "$fvcf3" ]; then
+  echo "++++ Site selection filter (filter 3)  $(date)"
+  vcftools --gzvcf "$fvcf0" \
+    --max-missing 0.5 \
+    --remove-indels \
+    --maf 0.05 \
+    --max-maf 0.95 \
+    --out $pfx.filter3 \
+    --recode \
+    --stdout \
+    | bgzip -c > "$fvcf3"
+else
+  echo "++++ Site selection filter (filter 3) was previously completed  $(date)"
+fi
+n=$(zcat "$fvcf3" | grep -v '^#' | wc -l)
+echo "Filter 3 $n variants  $(date)"
