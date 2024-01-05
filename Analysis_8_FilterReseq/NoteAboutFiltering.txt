@@ -1,7 +1,0 @@
-Kept 245 individuals out of 630. These had both phenotype and genotype data. 
-Filter1: Kept 4,360,067 sites out of 5,393,228 (80.8%). 
-Filter2: bb.vcf -> Set allele frequencies to NA 0.3 to 0.7. 
-Filter3: Repeat Filter 1 with bb.vcf work. This leaves 3994384 (91% of Filter 1 and 74% of original markers)
-
-
-
