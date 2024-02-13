@@ -1,4 +1,4 @@
-# 24caratcarrotdata
+# Colorome Paper
 Analyses used in publication: ""
 
 1) Folder "Analysis_1_HPLCDat_CA19" contains analyses and output related to QC-filter HPLC data from the CA_2019_732PI trial. 
