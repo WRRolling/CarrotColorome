@@ -1,0 +1,124 @@
+#!/bin/bash
+
+#SBATCH --time=24:00:00   # walltime limit (HH:MM:SS)
+#SBATCH --nodes=1   # number of nodes
+#SBATCH --ntasks-per-node=80   # 50 processor core(s) per node X 2 threads per core
+#SBATCH --mem=1200G   # maximum memory per node
+#SBATCH --partition=priority-mem    # large-memory node(s)
+#SBATCH --qos msn
+#SBATCH --job-name="CA81"
+#SBATCH --mail-user=william.rolling@usda.gov   # email address
+#SBATCH --mail-type=BEGIN
+#SBATCH --mail-type=END
+#SBATCH --mail-type=FAIL
+#SBATCH --output="CA81" # job standard output file (%j replaced by job id)
+#SBATCH --error="CA81" # job standard error file (%j replaced by job id)
+
+# LOAD MODULES, INSERT CODE, AND RUN YOUR PROGRAMS HERE
+module load r/4.2.3
+R CMD BATCH --vanilla '--args CA19Color2.csv Mark81/' Analysis81.R
+[william.rolling@ceres Mark81]$ ls
+Analysis81.R    BRR.csv        ETA_1_b.dat            ETA_1_varB.dat  ETA_3_varU.dat      KinshipPop.csv          ModKinPopCore.csv  PopulationAlone.csv
+BayesA.csv      btc.Anal81.R   ETA_1_lambda.dat       ETA_1_varU.dat  ETA_4_varU.dat      KinshipSummary.csv      ModKinPop.csv      RandomAccuracy.csv
+BayesB.csv      CA81           ETA_1_parBayesB.dat    ETA_2_b.dat     KinshipAlone.csv    ModCombinedSummary.csv  ModPop.csv         varE.dat
+BayesC.csv      CoreAlone.csv  ETA_1_parBayesC.dat    ETA_2_varU.dat  KinshipCore.csv     ModCore.csv             ModSummary.csv
+BayesLasso.csv  CorePop.csv    ETA_1_ScaleBayesA.dat  ETA_3_b.dat     KinshipCorePop.csv  ModKin.csv              mu.dat
+[william.rolling@ceres Mark81]$ cat Analysis81.R
+#arg1 <- Phenotype (WI18Pheno.csv or CA19Color.csv)
+#arg2 <- Mark81/
+print("Lets Go, Girls ... Come on")
+# Prepare R environment
+source("/project/carrot_genome/wrolling/OrangeGWA/Analysis_14/InputData/EnvironmentPrep.R")
+prepare_environment_and_data()
+args <- commandArgs(TRUE)
+# args <- c("WI18Pheno.csv", "Mark81/")
+print("I'm goin' out tonight")
+# Load the phenotype and population structure data
+input.path <- "/project/carrot_genome/wrolling/OrangeGWA/Analysis_14/InputData/"
+genotype.path <- "/project/carrot_genome/wrolling/OrangeGWA/Analysis_14/InputData/Markers/"
+Pheno <- read.csv(paste0(input.path,args[1]), head=T)
+Qmat <- read.csv(paste0(input.path,'Qmat.csv'), head=T)
+print("I'm feelin' alright")
+
+# make paths to genotype file
+Genotypes <- list.files(paste0(genotype.path,args[2]))
+Kinship.TFs <- str_detect(Genotypes, "Kin")
+Kinships.Files <- Genotypes[which(Kinship.TFs==T)]
+Genotype.Files <- Genotypes[which(Kinship.TFs==F)]
+print("Gonna let it all hang out")
+
+# Lod custom functions
+source(paste0(input.path,"InputMatchQmat.R")) #Needed?
+source(paste0(input.path, "calculate_metrics.R")) #load way to calculate accuracy
+source(paste0(input.path, "BGLR.setup.R")) # Load script to set up BGLR
+source(paste0(input.path, "CommuneCheck.R")) # Load script to find nodes that did not "communicate"
+source(paste0(input.path, "RandomData.R")) # Load Script to find random correlation
+source(paste0(input.path, "PopulationOnly.R")) # Load Script to consider population alone
+source(paste0(input.path, "CoreColorAlone.R")) # Load Script to Consider Core COlor alone
+source(paste0(input.path, "CorPop.R")) # Load Script to Consider Core and Population!
+source(paste0(input.path,"KinshipOnly.R")) # Load Script to Consider Kinship Alone
+source(paste0(input.path, "KinshipCore.R")) # Laod Script to Consider Kinship + Core
+source(paste0(input.path, "KinshipPop.R")) # Laod Script to Consider Kinship + Pop
+source(paste0(input.path, "KinshipCorePop.R")) # Load Script To Consider Kinship + Pop + Core Color
+source(paste0(input.path, "BayesA.R")) # Load Bayes A Script
+source(paste0(input.path, "BayesB.R")) # Load Bayes B Script
+source(paste0(input.path, "BayesC.R")) # Load Bayes C Script
+source(paste0(input.path, "BRR.R")) # Load Bayes BRR Script
+source(paste0(input.path, "BL.R")) # Load Bayesian Lasso Script
+BGLR_settings <- BGLRSetup(LOOCV = nrow(Pheno))
+print("Wanna make some noise, really raise my voice")
+#Random.Accuracy()
+subset_and_check_data.Qmat(Pheno, Qmat)
+dim(Pheno)
+dim(Qmat)
+#PopOnly()
+#write.csv(x=Output.dat, file="PopulationAlone.csv", row.names=BGLR_settings$Traits)
+#CoreOnly()
+#write.csv(x=Output.dat, file="CoreAlone.csv", row.names=BGLR_settings$Traits)
+#CorePop()
+#write.csv(x=Output.dat, file="CorePop.csv", row.names=BGLR_settings$Traits)
+
+KinshipOnly()
+write.csv(x=Output.dat, file="KinshipAlone.csv")
+KinshipCore()
+write.csv(x=Output.dat, file="KinshipCore.csv")
+KinshipPop()
+write.csv(x=Output.dat, file="KinshipPop.csv")
+KinshipCorePop()
+write.csv(x=Output.dat, file="KinshipCorePop.csv")
+BayesA.Mod()
+write.csv(x=Output.dat, file="BayesA.csv")
+BayesB.Mod()
+write.csv(x=Output.dat, file="BayesB.csv")
+BayesC.Mod()
+write.csv(x=Output.dat, file="BayesC.csv")
+BRR.Mod()
+write.csv(x=Output.dat, file="BRR.csv")
+BL.Mod()
+write.csv(x=Output.dat, file="BayesLasso.csv")
+
+source(paste0(input.path, "SummarizeKinship.R"))
+Kinsummary()
+source(paste0(input.path,"SummarizeMod.R"))
+Modsummary()
+
+
+# Test combination of models and other effects
+source(paste0(input.path, "ModCore.R"))
+source(paste0(input.path, "ModPop.R"))
+source(paste0(input.path, "ModKin.R"))
+source(paste0(input.path, "ModKinPop.R"))
+source(paste0(input.path, "ModKinPopCore.R"))
+
+
+ModCore(BestMod) # Model w/ Core Colore
+ModPop(BestMod) # Model w/ Population
+ModKin(BestMod) # Model with Kinship
+ModKinPop(BestMod) # Model with Kin and Pop
+ModKinPopCore(BestMod) # Everything!
+
+# Summary!
+source(paste0(input.path, "SummarizeCombined.R"))
+CombinedModsummary()
+
+quit()
