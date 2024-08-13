@@ -15,7 +15,7 @@ Raw.data <- read_csv("RawDataWI18.csv", col_names=T)
 View(Raw.data) # loaded correctly
 # (1.3) Subset to only include those samples with "Orange" coloring
 Color.dat <- read_csv("ColorScores.csv", col_names = T)
-SubRaw.data <- Raw.data[which(Raw.data$Sample.Name %in% Color.dat$`Sample Name`),]
+SubRaw.data <- Raw.data[which(Raw.data$Sample.Name %in% Color.dat$`Number`),]
 # (1.4) get a list of columns in the dataframe
 Raw.data %>% 
   colnames()
@@ -27,9 +27,12 @@ Raw.data.1 <- SubRaw.data %>%
 # (1.5) Identify samples w/o tech replicate
 Tech.Replciated <- 
   Raw.data.1$`Sample.Name`[duplicated(Raw.data.1$`Sample.Name`, )]
-No.Tech.Rep <- which(Raw.data.1$`Sample Name` %in% Tech.Replciated == FALSE)
+No.Tech.Rep <- which(Raw.data.1$`Sample.Name` %in% Tech.Replciated == FALSE)
+No.Tech.Rep.1 <- Raw.data.1[No.Tech.Rep,] 
+write.csv(No.Tech.Rep.1, file="NoTechRep.csv", row.names = F)
 # Not applicable. 
 rm(No.Tech.Rep)
+rm(No.Tech.Rep.1)
 ####### Part Two: Check for tech rep issues from outliers  ####### 
 # (2.1) Store ggplot in Raw.Lutein, specify data frame and carotenoid of interest
 Raw.Lutein <- ggplot(data=Raw.data.1, aes(Raw.data.1$`ug/g dry Lutein`)) + 
@@ -170,8 +173,6 @@ Alpha.Batch <- ggplot(data=Raw.Data.2,aes(x=Batches,
   theme_classic() + # keep it simple
   theme(legend.position = "none") # no legend needed
 
-
-
 Beta.Batch <- ggplot(data=Raw.Data.2,aes(x=Batches, 
                                          y=`ug/g dry Beta`, fill=Batches)) +
   geom_boxplot() +
@@ -195,11 +196,13 @@ Phyt.Batch <- ggplot(data=Raw.Data.2,aes(x=Batches,
   geom_boxplot() +
   theme_classic() + 
   theme(legend.position = "none")
+
 Zeta.Batch <- ggplot(data=Raw.Data.2,aes(x=Batches, 
                                          y=`ug/g dry Zeta`, fill=Batches)) +
   geom_boxplot() +
   theme_classic() + 
   theme(legend.position = "none")
+
 # (3.8) Smoosh Plots together for quick viewing
 Batch.Check.Boxes <- ggarrange(Alpha.Batch,Beta.Batch,Lut.Batch, 
                                Lyco.Batch, Phyt.Batch, Zeta.Batch,
@@ -301,5 +304,6 @@ HighMissingValues <- Output.data[which(Missingdat > 3),]
 # 6.6 Remove Samples with a high amount of missing data
 Output.data.1 <- Output.data[-which(Missingdat >3),]
 write.csv(x=Output.data.1, file="HPLC_dataWI18.csv", row.names = F)
+
 
 
