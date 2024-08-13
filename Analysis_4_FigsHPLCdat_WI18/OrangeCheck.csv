@@ -1,0 +1,63 @@
+"","Sample Name","ID","Exterior","Interior","Color","Alpha (ug/g)","Beta (ug/g)","Lut (ug/g)","Lycopene (ug/g)","Phyto (ug/g)","Zeta (ug/g)"
+"1",80001,"Vilmorin I04428","Orange","Orange","Orange",4.345264218,7.4445329135,1.644238236,NA,0,0
+"23",80034,"NSL 6193","Orange","Orange","Orange",2.7556923,4.368065454,NA,NA,0,0
+"43",80059,"PI 163241","Orange","Yellow","Orange",0,3.432411321,32.241405315,NA,0,0
+"50",80066,"PI 164798","Orange","Orange","Orange",0,6.9285112125,8.5922325365,NA,0,0
+"51",80067,"PI 164942","Orange","Orange","Orange",NA,6.504445181,14.42630717,NA,0,0
+"54",80070,"PI 165484","Orange","Orange","Orange",0,0,6.76932781,NA,0,0
+"66",80087,"PI 171642","Orange","Orange","Orange",0,5.1987626805,21.205497165,NA,0,0
+"73",80097,"Seminis 397694","Orange","Orange","Orange",3.180917387,0,1.603609018,0,0,0
+"124",80165,"PI 206960","Orange","Orange","Orange",0,7.9531181365,37.043114865,NA,0,0
+"162",80215,"PI 234623","Orange","Orange","Orange",0,0,12.70082879,NA,0,0
+"163",80217,"PI 249535","Orange","Orange","Orange",0,0,3.638832494,NA,0,0
+"167",80221,"PI 256065","Orange","Yellow","Orange",0,0,2.756250133,0,0,0
+"168",80223,"PI 261613","Orange","Orange","Orange",0,0,2.542764525,0,0,0
+"170",80226,"PI 261646","Orange","Orange","Orange",0,0,NA,NA,0,0
+"172",80228,"PI 261648","Orange","Orange","Orange",0,0,2.782319103,NA,0,0
+"184",80241,"PI 264233","Orange","Orange","Orange",0,0,2.532005603,0,0,0
+"186",80243,"PI 264235","Orange","Orange","Orange",0,0,6.05800418,NA,0,0
+"188",80245,"PI 264237","Orange","Orange","Orange",0,0,2.913956807,0,0,0
+"190",80247,"PI 264543","Orange","Orange","Orange",0,0,2.3631672115,NA,0,0
+"194",80251,"PI 267091","Orange","Yellow","Orange",0,0,55.61703547,NA,0,0
+"195",80253,"PI 269316","Orange","Orange","Orange",0,0,2.535067654,NA,0,0
+"197",80255,"PI 269318","Orange","Orange","Orange",0,0,2.485334913,NA,0,0
+"198",80256,"PI 269319","Orange","Orange","Orange",0,5.745825917,3.0685662925,NA,0,0
+"199",80258,"PI 269320","Orange","Orange","Orange",0,0,5.250832975,NA,0,0
+"211",80274,"PI 277669","Orange","Orange","Orange",0,0,2.3671511335,NA,0,0
+"215",80286,"PI 282480","Orange","Orange","Orange",0,0,6.025320131,NA,0,0
+"224",80296,"PI 285617","Orange","Orange","Orange",0,0,2.2240112195,NA,0,0
+"225",80297,"PI 285618","Orange","Orange","Orange",0,0,2.6670984485,NA,0,0
+"253",80339,"PI 324240","Orange","Orange","Orange",0,0,3.5777241085,NA,0,0
+"274",80362,"PI 326004","Orange","Orange","Orange",0,0,2.806209656,NA,0,0
+"279",80368,"PI 326011","Orange","Orange","Orange",0,0,5.4425470695,NA,0,0
+"286",80377,"PI 341205","Orange","Orange","Orange",0,0,3.2991776085,NA,0,0
+"288",80381,"PI 341209","Orange","Orange","Orange",0,0,3.309416353,NA,0,0
+"298",80392,"PI 357975","Orange","Orange","Orange",0,6.8378479315,3.93299357,NA,0,0
+"305",80402,"PI 357985","Orange","Orange","Orange",0,0,3.6894480075,NA,0,0
+"315",80415,"PI 379325","Orange","Orange","Orange",0,0,2.8217822495,NA,0,0
+"319",80425,"PI 419042","Orange","Orange","Orange",9.0236845155,0,2.9648793305,NA,0,0
+"322",80428,"PI 419110","Orange","Orange","Orange",0,0,20.27745135,NA,0,0
+"325",80433,"PI 430527","Orange","Orange","Orange",0,0,9.9248048,0,0,0
+"329",80439,"PI 430533","Orange","Orange","Orange",0,7.7109104535,4.8450618115,NA,0,0
+"332",80443,"PI 432900","Orange","Orange","Orange",0,0,3.102994978,NA,0,0
+"333",80444,"PI 432901","Orange","Orange","Orange",0,0,2.577919597,NA,0,0
+"350",80462,"PI 458857","Orange","Orange","Orange",0,0,10.440446225,NA,0,0
+"352",80464,"PI 458859","Orange","Orange","Orange",0,0,NA,NA,0,0
+"354",80466,"PI 478370","Orange","Orange","Orange",NA,0,11.83356444,NA,0,0
+"356",80469,"PI 483349","Orange","Orange","Orange",0,0,2.4197754645,NA,0,0
+"360",80474,"PI 502347","Orange","Orange","Orange",0,0,2.451596578,NA,0,0
+"370",80488,"PI 503342","Orange","Orange","Orange",0,0,2.4512306655,NA,0,0
+"371",80489,"PI 503343","Orange","Orange","Orange",0,0,2.398178604,0,0,0
+"377",80498,"PI 508474","Orange","Orange","Orange",0,0,4.638271255,0,0,0
+"380",80530,"PI 535887","Orange","Orange","Orange",0,0,4.681101535,0,0,0
+"391",80558,"PI 634656","Orange","Orange","Orange",0,0,3.453423938,0,0,0
+"436",80621,"PI 652166","Orange","Orange","Orange",0,0,NA,NA,0,0
+"456",80647,"PI 652205","Orange","Yellow","Orange",0,0,15.52978843,NA,0,0
+"472",80671,"PI 652255","Orange","Yellow","Orange",0,0,4.603906705,NA,0,0
+"482",80688,"PI 652279","Orange","Orange","Orange",0,0,5.1591969955,NA,0,0
+"498",80715,"PI 652404","Orange","Orange","Orange",0,0,NA,NA,0,0
+"502",80722,"FN2-9","Orange","Orange","Orange",0,0,NA,NA,0,0
+"507",80729,"B5280","Orange","Orange","Orange",0,0,NA,NA,0,0
+"547",80776,"WAY268C","Orange","Orange","Orange",0,0,3.270944204,0,0,0
+"548",80777,"WAY271B","Orange","Orange","Orange",0,0,3.3103355665,NA,0,0
+"549",80779,"WAY273C","Orange","Orange","Orange",0,0,3.115394235,NA,0,0

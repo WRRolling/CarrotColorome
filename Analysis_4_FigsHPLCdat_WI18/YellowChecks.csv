@@ -1,0 +1,38 @@
+,Sample Name,ID,Exterior,Interior,Color,Alpha (ug/g),Beta (ug/g),Lut (ug/g),Lycopene (ug/g),Phyto (ug/g),Zeta (ug/g),
+11,80011,Ames 25040,Yellow,Yellow,Yellow,4.494525517,57.81284807,41.24212406,48.5595897,34.92965566,5.4719699,Already Changed
+43,80059,PI 163241,Yellow,Yellow,Yellow,0,3.432411321,32.24140532,NA,0,0,Change to Orange Yellow Orange
+50,80066,PI 164798,Yellow,Yellow,Yellow,0,6.928511213,8.592232537,NA,0,0,Change to Orange Yellow Orange
+51,80067,PI 164942,Yellow,Yellow,Yellow,NA,6.504445181,14.42630717,NA,0,0,Change to Orange Yellow Orange
+59,80079,PI 169484,Yellow,Yellow,Yellow,0,9.398562085,14.64918173,NA,0,0,Change to Orange Yellow Orange
+66,80087,PI 171642,Yellow,Yellow,Yellow,0,5.198762681,21.20549717,NA,0,0,Change to Orange Yellow Orange
+74,80098,PI 172894,Yellow,Yellow,Yellow,7.586886176,11.04257739,21.35120266,NA,0,0,Change to Orange Yellow Orange
+78,80106,PI 174828,Yellow,Yellow,Yellow,0,31.75368395,15.31105553,NA,0,0,Change to Orange Yellow Orange
+87,80117,PI 176561,Yellow,Yellow,Yellow,0,11.61719641,54.23311027,NA,0,0,Change to Orange Yellow Orange
+95,80130,PI 178900,Yellow,Yellow,Yellow,0,11.6287243,24.88077769,NA,0,0,Change to Orange Yellow Orange
+100,80135,PI 179689,Yellow,Yellow,Yellow,0,25.67598502,23.27402491,NA,0,0,Change to Orange Yellow Orange
+101,80136,PI 179690,Yellow,Yellow,Yellow,0,19.61473977,30.18119706,NA,0,0,Change to Orange Yellow Orange
+108,80145,PI 182204,Yellow,Yellow,Yellow,0,9.232884888,52.66013323,NA,0,0,Change to Orange Yellow Orange
+112,80149,PI 183401,Yellow,Yellow,Yellow,0,29.21803803,8.165325201,NA,0,0,Change to Orange Yellow Orange
+120,80160,PI 204704,Yellow,Yellow,Yellow,0,9.188304976,43.0086886,NA,0,0,Change to Orange Yellow Orange
+124,80165,PI 206960,Yellow,Yellow,Yellow,0,7.953118137,37.04311487,NA,0,0,Change to Orange Yellow Orange
+154,80205,PI 227014,Yellow,Yellow,Yellow,0,19.68249385,88.67106176,NA,0,0,Change to Orange Yellow Orange
+187,80244,PI 264236,Yellow,Yellow,Yellow,8.135379809,19.14542894,55.96154207,NA,0,0,Change to Orange Yellow Orange
+193,80250,PI 267090,Yellow,Yellow,Yellow,55.05408536,184.2045863,117.0870937,NA,0,0,Change to Orange Yellow Orange
+206,80267,PI 271473,Yellow,Yellow,Yellow,0,43.59942763,70.31690572,11.07874917,0,0,Change to Orange Yellow Orange
+233,80308,PI 288458,Yellow,Yellow,Yellow,0,27.38468067,18.5750693,NA,0,0,Change to Orange Yellow Orange
+292,80386,PI 344361,Yellow,Yellow,Yellow,0,11.37384541,64.74908008,NA,0,0,Change to Orange Yellow Orange
+308,80405,PI 357988,Yellow,Yellow,Yellow,0,53.95457371,7.598495442,NA,0,0,Change to Orange Yellow Orange
+311,80410,PI 369349,Yellow,Yellow,Yellow,8.351718591,21.08713614,55.15245258,NA,0,0,Change to Orange Yellow Orange
+342,80454,PI 451754,Yellow,Yellow,Yellow,0,13.78869405,65.72805444,NA,0,0,Change to Orange Yellow Orange
+459,80650,PI 652208,Yellow,Yellow,Yellow,0,20.64672116,171.0092454,0,0,0,Change to Orange Yellow Orange
+461,80652,PI 652210,Yellow,Yellow,Yellow,11.05979061,17.99041818,56.27664073,0,0,0,Change to Orange Yellow Orange
+462,80653,PI 652211,Yellow,Yellow,Yellow,99.35394607,70.67506583,47.15475611,0,26.59996205,0,Change to Orange Yellow Orange
+468,80665,PI 652247,Yellow,Yellow,Yellow,16.42964851,124.638294,82.55460816,NA,0,0,Change to Orange Yellow Orange
+473,80672,PI 652256,Yellow,Yellow,Yellow,0,13.18053973,26.31530455,NA,0,0,Change to Orange Yellow Orange
+477,80677,PI 652260,Yellow,Yellow,Yellow,31.01789004,329.1289095,192.6652244,NA,19.31934626,17.49842755,Change to Orange Yellow Orange
+479,80684,PI 652275,Yellow,Yellow,Yellow,58.34569675,108.3679718,158.571483,NA,0,0,Change to Orange Yellow Orange
+480,80685,PI 652276,Yellow,Yellow,Yellow,0,28.07864467,13.47950863,NA,0,0,Change to Orange Yellow Orange
+490,80700,PI 652334,Yellow,Yellow,Yellow,0,18.83495736,102.1675031,NA,0,0,Change to Orange Yellow Orange
+499,80716,PI 652405,Yellow,Yellow,Yellow,24.21795073,41.57759698,85.15743018,NA,0,0,Change to Orange Yellow Orange
+514,80738,B2327,Yellow,Yellow,Yellow,29.71419754,89.94118597,71.64433982,NA,9.433535826,32.88184706,Change to Orange Yellow Orange
+541,80767,Y8519,Yellow,Yellow,Yellow,14.21288624,47.71483506,106.4523312,NA,0,0,Change to Orange Yellow Orange
