@@ -14,4 +14,5 @@ Analyses used in publication: ""
 7) The folder: "Analysis_7_CA19.VCF" contains a text file describing how TASSEL was used to identify variants and SNP data was filtered.
 8) The folder: "Analysis_8_CombineandFilterVCF" contains analysis to combine genotypic data from two trial (Resequencing data dn GBS data).
 9) The folder: "Analysis_9_LD_PopStructure" contains files to complete population structure analysis with admxture and fastStructure and calculate LD decay.
-10) 
+10) The folder: Analysis_10_polyRAD" contains files related to variant calling and filtering in polyRAD
+11) The folder: "Analysis_11GWA" contains files related to completing GWAS. 
