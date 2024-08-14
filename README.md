@@ -4,7 +4,7 @@ A full written description of this project are found in the publication: (TBD)
 Images of carrot roots and a file genotypic data file from polyRAD is available at [CarrotOmics](https://carrotomics.org/). 
 
 Software used in these analyses include: 
-[polyRAD]([https://carrotomics.org/](https://github.com/lvclark/polyRAD/) 
+[polyRAD](https://github.com/lvclark/polyRAD/) 
 [BGLR](https://github.com/gdlc/BGLR-R/) 
 [fastStructure](https://rajanil.github.io/fastStructure/)
 [qqman](https://github.com/stephenturner/qqman)
