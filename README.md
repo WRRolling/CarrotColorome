@@ -3,7 +3,7 @@ This GitHub repository houses the analyses conducted for a project investigating
 A full written description of this project can be found in the following publication: (TBD) 
 
 Images of carrot roots and a file containing genotypic data from polyRAD are available on [CarrotOmics](https://carrotomics.org/). 
-
+----------------------------------------------------------------------------
 Software used in these analyses includes: 
   - [BGLR](https://github.com/gdlc/BGLR-R/) 
   - [fastStructure](https://rajanil.github.io/fastStructure/)
