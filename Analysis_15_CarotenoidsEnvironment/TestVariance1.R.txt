@@ -1,0 +1,35 @@
+# subset to first sample
+samps <- HPLC.dat[which(HPLC.dat$Plot == All.Unique.Plots[1]),]
+# Zeta
+print("Zeta - mean - var, CI")
+print(mean(samps$ug_gramfreshZeta))
+print(var(samps$ug_gramfreshZeta)) 
+print(ci_var(samps$ug_gramfreshZeta))
+
+# Alpha
+print("Alpha- mean - var, CI")
+print(mean(samps$ug_gramfreshAlpha))
+print(var(samps$ug_gramfreshAlpha))
+print(ci_var(samps$ug_gramfreshAlpha))
+
+# Beta
+print("Beta- mean - var, CI")
+print(mean(samps$ug_gramdryBeta))
+print(var(samps$ug_gramfreshBeta)) 
+print(ci_var(samps$ug_gramfreshBeta))
+
+# Phyto
+print("Phyto- mean - var, CI")
+print(mean(samps$ug_gramfreshPhyto))
+print(var(samps$ug_gramfreshPhyto))
+print(ci_var(samps$ug_gramfreshPhyto))
+
+# A450
+print("A450- mean - var, CI")
+print(mean(samps$avg.ug.fresh450))
+print(var(samps$avg.ug.fresh450))
+print(ci_var(samps$avg.ug.fresh450))
+
+
+
+
