@@ -1,7 +1,6 @@
 This GitHub repository houses the analyses conducted for a project investigating the genomic basis of carotenoid accumulation in carrots. The work encompassed phenotypic data management (organization, filtering, outlier removal, visualization), genotypic data processing (variant calling, filtering, formatting), and population-level analyses (population structure, genome-wide association study, genomic prediction, and associated visualizations).
-
+--------------------------------------------------------------------------
 A full written description of this project can be found in the following publication: (TBD) 
-
 Images of carrot roots and a file containing genotypic data from polyRAD are available on [CarrotOmics](https://carrotomics.org/). 
 ----------------------------------------------------------------------------
 Software used in these analyses includes: 
