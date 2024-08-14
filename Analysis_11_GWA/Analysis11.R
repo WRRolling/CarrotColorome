@@ -24,45 +24,18 @@ myCV <- read.csv("InputData/Qmat.csv", head=T)
 ######## Notes ####### 
 
 # I tried Red vs Orange
+# I tried white vs yellow
 # I tried white + yellow vs Orange
 # I did orange vs white but got redundant information as orange v yellow
 # The three analyses I am presenting are the best!
 # I set the significance on the full genotype file. 
   # This is more stringent then MAF filtered data
 
-######## Part Two: Yellow vs White GWA ######
+######## Part Two: Yellow vs Orange #######
 # (2.1) Create director for analyses
-dir.create("WhitevYellow/")
-setwd("WhitevYellow/")
-
-# (2.2) ID White and Yellows for acurate MAF filtering
-Colors <- c(2,4)
-Keepers <- which(myY$Color %in% Colors)
-# (2.3) Subset Phenotype
-myY.1 <- myY[Keepers,]
-# (2.4) Subset Genotype
-myGD.1 <- myGD[which(myGD$Taxa %in% myY.1$Taxa),]
-# (2.5) Subset CV
-myCV.1 <- myCV[which(myCV$Taxa %in% myY.1$Taxa),]
-
-# (3.10) Run GWAS
-myGAPIT=GAPIT(
-  Y=myY.1[,c(1,4)], #fist column is ID
-  GD=myGD.1,
-  GM=myGM,
-  CV=myCV.2,
-  KI=myK1.1,
-  SNP.MAF=0.20, 
-  model="MLM")  
-
-
-
-
-######## Part Three: Yellow vs Orange #######
-# (3.1) Create director for analyses
 dir.create("../YellowvOrange/")
 setwd("../YellowvOrange/")
-# (3.2) Subset to Just Yellow and Orange Accessions
+# (2.2) Subset to Just Yellow and Orange Accessions
 Colors <- c(1,2)
 Keepers <- which(myY$Color %in% Colors)
 # (2.3) Subset Phenotype
@@ -71,8 +44,7 @@ myY.1 <- myY[Keepers,]
 myGD.1 <- myGD[which(myGD$Taxa %in% myY.1$Taxa),]
 # (2.5) Subset CV
 myCV.1 <- myCV[which(myCV$Taxa %in% myY.1$Taxa),]
-
-# (3.10) Run GWAS
+# (2.6) Run GWAS
 myGAPIT=GAPIT(
   Y=myY.1[,c(1,5)], #fist column is ID
   GD=myGD.1,
@@ -80,16 +52,15 @@ myGAPIT=GAPIT(
   PCA.total=2,
   SNP.MAF=0.05, 
   model="MLM")  
-
-######## Part Four: Significance Threshold #######
-# (4.1) Format Input data
+######## Part Three: Significance Threshold #######
+# (3.1) Format Input data
 dat.1 <- myGD
 dat.2 <- as.data.frame(t(dat.1))
 dat.3 <- mutate_if(dat.2, is.factor, ~ as.numeric(levels(.x))[.x])
 dat.4 <- data.matrix(dat.3)
 dat.4.5 <- dat.4[-1,]
 dat.5 <- scale(dat.4.5)
-# (4.2) Load simpleM Functions
+# (3.2) Load simpleM Functions
 PCA_cutoff <- 0.995
 Meff_PCA <- function(eigenValues, percentCut){
   totalEigenValues <- sum(eigenValues)
@@ -109,7 +80,7 @@ Meff_PCA <- function(eigenValues, percentCut){
   }
   return(index_Eigen)
 }
-# infer the cutoff => Meff
+#3.3 infer the cutoff => Meff
 inferCutoff <- function(dt_My){
   CLD <- cor(dt_My)
   eigen_My <- eigen(CLD)
@@ -135,33 +106,22 @@ while(myStop < numLoci){
   simpleMeff <- c(simpleMeff, MeffBlk)
   myStart <- myStop+1
 }
-# (4.3) Run simpleM
+# (3.4) Run simpleM
 snpInBlk <- t(dat.5[myStart:numLoci, ])
 MeffBlk <- inferCutoff(snpInBlk)
 simpleMeff <- c(simpleMeff, MeffBlk)
 print(simpleMeff)
-# (4.4) Record output is here:
+# (3.5) Record output is here:
 Tot.SNP <- cat("Total number of SNPs is: ", numLoci, "\n")
 Ind.Test <- cat("Inferred Meff is: ", sum(simpleMeff), "\n")
 # 7.968381e-07
 # Sig Threshold 6.1
-
-
-
-
-
-
-
-
-
-
-
-######## Part Five: Manhattan Plot ####### 
-# (5.1) Load R Packages
+######## Part Four: Manhattan Plot ####### 
+# (4.1) Load R Packages
 library('qqman')
 library('tidyverse')
 library('calibrate')  
-# (5.2) Format for qqman
+# (4.2) Format for qqman
 dat <- read.csv("WhitevYellow/GAPIT.Association.GWAS_Results.MLM.Color.csv", head=T)
 qq.dat <- dat[,1:5]
 colnames(qq.dat) <- c("SNP",
@@ -170,11 +130,11 @@ colnames(qq.dat) <- c("SNP",
                       "P",
                       "zscore")
 
-# (5.3) Identify Highest association for y axis 
+# (4.3) Identify Highest association for y axis 
 max(-log10(qq.dat$P)) # 7.773654!
 y_axis <- 10
 
-# (5.4)  Highlight "known" loci
+# (4.4)  Highlight "known" loci
 Chr03 <- which(qq.dat$CHR == 3)
 Chr03 <- qq.dat[Chr03,]
 Ordf <- Chr03[which(Chr03$BP > 5012152 & Chr03$BP < 5133744),]
@@ -216,7 +176,7 @@ fix(manhattan)
 max(-log10(qq.dat$P)) # 7.773654!
 y_axis <- 15
 
-# (5.4)  Highlight "known" loci
+# (4.4)  Highlight "known" loci
 Chr03 <- which(qq.dat$CHR == 3)
 Chr03 <- qq.dat[Chr03,]
 Ordf <- Chr03[which(Chr03$BP > 5012152 & Chr03$BP < 5133744),]
@@ -229,7 +189,7 @@ Y2df <- Chr07[which(Chr07$BP > 38656562 & Chr07$BP < 39189059),]
 OrSNPs <- as.character(Ordf$SNP)
 YSNPs <- as.character(Ydf$SNP)
 Y2SNPs <- as.character(Y2df$SNP)
-# (5.5) Combine SNP data
+# (4.5) Combine SNP data
 SNPsofFun <- c(OrSNPs, YSNPs, Y2SNPs)
 
 
@@ -242,8 +202,7 @@ manhattan(qq.dat, main="Yellow vs Orange", ylim=c(0,y_axis), cex = 1.2, cex.lab=
           annotatePval  = F, highlight = SNPsofFun)
 dev.off()
 
-
-######## Part Six: Extract Markers for Haploview ####### 
+######## Part Five: Extract Markers for Haploview ####### 
 rm(list = ls())
 library('vroom')
 myGD <- vroom("InputData/Probgeno.csv")
@@ -281,27 +240,327 @@ Sub.End <- Y2.2 + 50
 Y2 <- myGD[,Sub.Front:Sub.End]
 write.csv(x=Y2, file="../Analysis_12Haploview/Y2.csv", row.names = F)
 
-######## Part Seven: Core Color #########
+######## Part Six: Core Color #########
+# (6.1) Create directory for output
 dir.create("CoreColor/")
 setwd("CoreColor/")
-
-# (2.2) ID White and Yellows for acurate MAF filtering
+# (6.2) ID White and Yellows for acurate MAF filtering
 Colors <- c(1)
 Keepers <- which(myY$Color %in% Colors)
-# (2.3) Subset Phenotype
+# (6.3) Subset Phenotype
 myY.1 <- myY[Keepers,]
 myY.1 <- myY.1[-which(myY.1$Interior == 4),]
-# (2.4) Subset Genotype
+# (6.4) Subset Genotype
 myGD.1 <- myGD[which(myGD$Taxa %in% myY.1$Taxa),]
-# (2.5) Subset CV
+# (6.5) Subset CV
 myCV.1 <- myCV[which(myCV$Taxa %in% myY.1$Taxa),]
-
-# (3.10) Run GWAS
+# (6.6) Run GWAS
 myGAPIT=GAPIT(
   Y=myY.1[,c(1,3)], #fist column is ID
   GD=myGD.1,
   GM=myGM,
   #CV=myCV.1,
   SNP.MAF=0.15, 
-  model="BLINK")  
+  model="MLM")  
 
+######## Part Seven: Wisconsin - Oranges #########
+# (7.1) Create directory for output
+dir.create("../Wisco18/")
+setwd("../Wisco18/")
+myY.2 <- myY.1[1:402,]
+# (7.2) Run Anaysis
+myGAPIT=GAPIT(
+  Y=myY.2[,c(1,6:12)], #fist column is ID
+  GD=myGD.1,
+  GM=myGM,
+  CV=myCV.1,
+  SNP.MAF=0.15, 
+  model="MLM")  
+# (7.3) Plot Results!
+dat <- read.csv("GAPIT.Association.GWAS_Results.MLM.Alpha.csv", head=T)
+qq.dat <- dat[,1:5]
+colnames(qq.dat) <- c("SNP",
+                      "CHR",
+                      "BP",
+                      "P",
+                      "zscore")
+y_axis <- 10
+png(file="Alpha.png", bg="transparent", width = 1000)
+manhattan(qq.dat, main="Carotenoids", ylim=c(0,y_axis), cex = 1.2, cex.lab=2, 
+          cex.axis = 2, cex.main=2, col=c("orange","blue"), 
+          suggestiveline=F, genomewideline=-log10(7.968381e-07),
+          chrlabs=c("Chr1","Chr2","Chr3","Chr4","Chr5","Chr6",
+                    "Chr7","Chr8","Chr9"),
+          annotatePval  = F, highlight = SNPsofFun)
+dev.off()
+dat <- read.csv("GAPIT.Association.GWAS_Results.MLM.Beta.csv", head=T)
+qq.dat <- dat[,1:5]
+colnames(qq.dat) <- c("SNP",
+                      "CHR",
+                      "BP",
+                      "P",
+                      "zscore")
+fix(manhattan) 
+png(file="Beta.png", bg="transparent", width = 1000)
+manhattan(qq.dat, main="Carotenoids", ylim=c(0,y_axis), cex = 1.2, cex.lab=2, 
+          cex.axis = 2, cex.main=2, col=c("orange","blue"), 
+          suggestiveline=F, genomewideline=-log10(7.968381e-07),
+          chrlabs=c("Chr1","Chr2","Chr3","Chr4","Chr5","Chr6",
+                    "Chr7","Chr8","Chr9"),
+          annotatePval  = F, highlight = SNPsofFun)
+dev.off()
+dat <- read.csv("GAPIT.Association.GWAS_Results.MLM.Lutein.csv", head=T)
+qq.dat <- dat[,1:5]
+colnames(qq.dat) <- c("SNP",
+                      "CHR",
+                      "BP",
+                      "P",
+                      "zscore")
+fix(manhattan) 
+png(file="Lutein.png", bg="transparent", width = 1000)
+manhattan(qq.dat, main="Carotenoids", ylim=c(0,y_axis), cex = 1.2, cex.lab=2, 
+          cex.axis = 2, cex.main=2, col=c("orange","blue"), 
+          suggestiveline=F, genomewideline=-log10(7.968381e-07),
+          chrlabs=c("Chr1","Chr2","Chr3","Chr4","Chr5","Chr6",
+                    "Chr7","Chr8","Chr9"),
+          annotatePval  = F, highlight = SNPsofFun)
+dev.off()
+dat <- read.csv("GAPIT.Association.GWAS_Results.MLM.Lycopene.csv", head=T)
+qq.dat <- dat[,1:5]
+colnames(qq.dat) <- c("SNP",
+                      "CHR",
+                      "BP",
+                      "P",
+                      "zscore")
+fix(manhattan) # Lycopene is diamond - 18
+png(file="Lyco.png", bg="transparent", width = 1000)
+manhattan(qq.dat, main="Carotenoids", ylim=c(0,y_axis), cex = 1.2, cex.lab=2, 
+          cex.axis = 2, cex.main=2, col=c("orange","blue"), 
+          suggestiveline=F, genomewideline=-log10(7.968381e-07),
+          chrlabs=c("Chr1","Chr2","Chr3","Chr4","Chr5","Chr6",
+                    "Chr7","Chr8","Chr9"),
+          annotatePval  = F, highlight = SNPsofFun)
+dev.off()
+dat <- read.csv("GAPIT.Association.GWAS_Results.MLM.Phytoene.csv", head=T)
+
+qq.dat <- dat[,1:5]
+colnames(qq.dat) <- c("SNP",
+                      "CHR",
+                      "BP",
+                      "P",
+                      "zscore")
+fix(manhattan) 
+png(file="Phyto.png", bg="transparent", width = 1000)
+manhattan(qq.dat, main="Carotenoids", ylim=c(0,y_axis), cex = 1.2, cex.lab=2, 
+          cex.axis = 2, cex.main=2, col=c("orange","blue"), 
+          suggestiveline=F, genomewideline=-log10(7.968381e-07),
+          chrlabs=c("Chr1","Chr2","Chr3","Chr4","Chr5","Chr6",
+                    "Chr7","Chr8","Chr9"),
+          annotatePval  = F, highlight = SNPsofFun)
+dev.off()
+dat <- read.csv("GAPIT.Association.GWAS_Results.MLM.Zeta.csv", head=T)
+qq.dat <- dat[,1:5]
+colnames(qq.dat) <- c("SNP",
+                      "CHR",
+                      "BP",
+                      "P",
+                      "zscore")
+fix(manhattan) 
+png(file="Zeta.png", bg="transparent", width = 1000)
+manhattan(qq.dat, main="Carotenoids", ylim=c(0,y_axis), cex = 1.2, cex.lab=2, 
+          cex.axis = 2, cex.main=2, col=c("orange","blue"), 
+          suggestiveline=F, genomewideline=-log10(7.968381e-07),
+          chrlabs=c("Chr1","Chr2","Chr3","Chr4","Chr5","Chr6",
+                    "Chr7","Chr8","Chr9"),
+          annotatePval  = F, highlight = SNPsofFun)
+dev.off()
+dat <- read.csv("GAPIT.Association.GWAS_Results.MLM.Total.csv", head=T)
+qq.dat <- dat[,1:5]
+colnames(qq.dat) <- c("SNP",
+                      "CHR",
+                      "BP",
+                      "P",
+                      "zscore")
+fix(manhattan)
+
+png(file="Total.png", bg="transparent", width = 1000)
+manhattan(qq.dat, main="Carotenoids", ylim=c(0,y_axis), cex = 1.2, cex.lab=2, 
+          cex.axis = 2, cex.main=2, col=c("orange","blue"), 
+          suggestiveline=F, genomewideline=-log10(7.968381e-07),
+          chrlabs=c("Chr1","Chr2","Chr3","Chr4","Chr5","Chr6",
+                    "Chr7","Chr8","Chr9"),
+          annotatePval  = F, highlight = SNPsofFun)
+dev.off()
+
+######## Part Eight: CA - Oranges #########
+# (8.1) Create Directory For Output
+dir.create("../CA19/")
+setwd("../CA19/")
+myY.2 <- myY.1[403:658,]
+# (8.2) Run Analysis
+myGAPIT=GAPIT(
+  Y=myY.2[,c(1,6:12)], #fist column is ID
+  GD=myGD.1,
+  GM=myGM,
+  CV=myCV.1,
+  SNP.MAF=0.15, 
+  model="MLM")  
+# (8.3) Plot Results!
+dat <- read.csv("GAPIT.Association.GWAS_Results.MLM.Alpha.csv", head=T)
+qq.dat <- dat[,1:5]
+colnames(qq.dat) <- c("SNP",
+                      "CHR",
+                      "BP",
+                      "P",
+                      "zscore")
+y_axis <- 10
+png(file="Alpha.png", bg="transparent", width = 1000)
+manhattan(qq.dat, main="Carotenoids", ylim=c(0,y_axis), cex = 1.2, cex.lab=2, 
+          cex.axis = 2, cex.main=2, col=c("orange","blue"), 
+          suggestiveline=F, genomewideline=-log10(7.968381e-07),
+          chrlabs=c("Chr1","Chr2","Chr3","Chr4","Chr5","Chr6",
+                    "Chr7","Chr8","Chr9"),
+          annotatePval  = F, highlight = SNPsofFun)
+dev.off()
+dat <- read.csv("GAPIT.Association.GWAS_Results.MLM.Beta.csv", head=T)
+qq.dat <- dat[,1:5]
+colnames(qq.dat) <- c("SNP",
+                      "CHR",
+                      "BP",
+                      "P",
+                      "zscore")
+fix(manhattan) 
+png(file="Beta.png", bg="transparent", width = 1000)
+manhattan(qq.dat, main="Carotenoids", ylim=c(0,y_axis), cex = 1.2, cex.lab=2, 
+          cex.axis = 2, cex.main=2, col=c("orange","blue"), 
+          suggestiveline=F, genomewideline=-log10(7.968381e-07),
+          chrlabs=c("Chr1","Chr2","Chr3","Chr4","Chr5","Chr6",
+                    "Chr7","Chr8","Chr9"),
+          annotatePval  = F, highlight = SNPsofFun)
+dev.off()
+dat <- read.csv("GAPIT.Association.GWAS_Results.MLM.Lutein.csv", head=T)
+qq.dat <- dat[,1:5]
+colnames(qq.dat) <- c("SNP",
+                      "CHR",
+                      "BP",
+                      "P",
+                      "zscore")
+fix(manhattan) 
+png(file="Lutein.png", bg="transparent", width = 1000)
+manhattan(qq.dat, main="Carotenoids", ylim=c(0,y_axis), cex = 1.2, cex.lab=2, 
+          cex.axis = 2, cex.main=2, col=c("orange","blue"), 
+          suggestiveline=F, genomewideline=-log10(7.968381e-07),
+          chrlabs=c("Chr1","Chr2","Chr3","Chr4","Chr5","Chr6",
+                    "Chr7","Chr8","Chr9"),
+          annotatePval  = F, highlight = SNPsofFun)
+dev.off()
+dat <- read.csv("GAPIT.Association.GWAS_Results.MLM.Lycopene.csv", head=T)
+qq.dat <- dat[,1:5]
+colnames(qq.dat) <- c("SNP",
+                      "CHR",
+                      "BP",
+                      "P",
+                      "zscore")
+fix(manhattan) # Lycopene is diamond - 18
+png(file="Lyco.png", bg="transparent", width = 1000)
+manhattan(qq.dat, main="Carotenoids", ylim=c(0,y_axis), cex = 1.2, cex.lab=2, 
+          cex.axis = 2, cex.main=2, col=c("orange","blue"), 
+          suggestiveline=F, genomewideline=-log10(7.968381e-07),
+          chrlabs=c("Chr1","Chr2","Chr3","Chr4","Chr5","Chr6",
+                    "Chr7","Chr8","Chr9"),
+          annotatePval  = F, highlight = SNPsofFun)
+dev.off()
+dat <- read.csv("GAPIT.Association.GWAS_Results.MLM.Phytoene.csv", head=T)
+
+qq.dat <- dat[,1:5]
+colnames(qq.dat) <- c("SNP",
+                      "CHR",
+                      "BP",
+                      "P",
+                      "zscore")
+fix(manhattan) 
+png(file="Phyto.png", bg="transparent", width = 1000)
+manhattan(qq.dat, main="Carotenoids", ylim=c(0,y_axis), cex = 1.2, cex.lab=2, 
+          cex.axis = 2, cex.main=2, col=c("orange","blue"), 
+          suggestiveline=F, genomewideline=-log10(7.968381e-07),
+          chrlabs=c("Chr1","Chr2","Chr3","Chr4","Chr5","Chr6",
+                    "Chr7","Chr8","Chr9"),
+          annotatePval  = F, highlight = SNPsofFun)
+dev.off()
+dat <- read.csv("GAPIT.Association.GWAS_Results.MLM.Zeta.csv", head=T)
+qq.dat <- dat[,1:5]
+colnames(qq.dat) <- c("SNP",
+                      "CHR",
+                      "BP",
+                      "P",
+                      "zscore")
+fix(manhattan) 
+png(file="Zeta.png", bg="transparent", width = 1000)
+manhattan(qq.dat, main="Carotenoids", ylim=c(0,y_axis), cex = 1.2, cex.lab=2, 
+          cex.axis = 2, cex.main=2, col=c("orange","blue"), 
+          suggestiveline=F, genomewideline=-log10(7.968381e-07),
+          chrlabs=c("Chr1","Chr2","Chr3","Chr4","Chr5","Chr6",
+                    "Chr7","Chr8","Chr9"),
+          annotatePval  = F, highlight = SNPsofFun)
+dev.off()
+dat <- read.csv("GAPIT.Association.GWAS_Results.MLM.Total.csv", head=T)
+qq.dat <- dat[,1:5]
+colnames(qq.dat) <- c("SNP",
+                      "CHR",
+                      "BP",
+                      "P",
+                      "zscore")
+
+png(file="Total.png", bg="transparent", width = 1000)
+manhattan(qq.dat, main="Carotenoids", ylim=c(0,y_axis), cex = 1.2, cex.lab=2, 
+          cex.axis = 2, cex.main=2, col=c("orange","blue"), 
+          suggestiveline=F, genomewideline=-log10(7.968381e-07),
+          chrlabs=c("Chr1","Chr2","Chr3","Chr4","Chr5","Chr6",
+                    "Chr7","Chr8","Chr9"),
+          annotatePval  = F, highlight = SNPsofFun)
+dev.off()
+
+
+######## Part Nine: Combined Results #########
+# (8.1) Create Directory For Output
+dir.create("../CombinedHPLC/")
+setwd("../CombinedHPLC/")
+# (8.2) Run Analysis
+myGAPIT=GAPIT(
+  Y=myY.1[,c(1,6:12)], #fist column is ID
+  GD=myGD.1,
+  GM=myGM,
+  CV=myCV.1,
+  SNP.MAF=0.15, 
+  model="MLM")  
+# (8.3) Plot Results!
+dat <- read.csv("GAPIT.Association.GWAS_Results.MLM.Alpha.csv", head=T)
+qq.dat <- dat[,1:5]
+colnames(qq.dat) <- c("SNP",
+                      "CHR",
+                      "BP",
+                      "P",
+                      "zscore")
+y_axis <- 10
+png(file="Alpha.png", bg="transparent", width = 1000)
+manhattan(qq.dat, main="Carotenoids", ylim=c(0,y_axis), cex = 1.2, cex.lab=2, 
+          cex.axis = 2, cex.main=2, col=c("orange","blue"), 
+          suggestiveline=F, genomewideline=-log10(7.968381e-07),
+          chrlabs=c("Chr1","Chr2","Chr3","Chr4","Chr5","Chr6",
+                    "Chr7","Chr8","Chr9"),
+          annotatePval  = F, highlight = SNPsofFun)
+fix(manhattan)
+dat <- read.csv("GAPIT.Association.GWAS_Results.MLM.Total.csv", head=T)
+qq.dat <- dat[,1:5]
+colnames(qq.dat) <- c("SNP",
+                      "CHR",
+                      "BP",
+                      "P",
+                      "zscore")
+png(file="Total.png", bg="transparent", width = 1000)
+manhattan(qq.dat, main="Carotenoids", ylim=c(0,y_axis), cex = 1.2, cex.lab=2, 
+          cex.axis = 2, cex.main=2, col=c("orange","blue"), 
+          suggestiveline=F, genomewideline=-log10(7.968381e-07),
+          chrlabs=c("Chr1","Chr2","Chr3","Chr4","Chr5","Chr6",
+                    "Chr7","Chr8","Chr9"),
+          annotatePval  = F, highlight = SNPsofFun)
