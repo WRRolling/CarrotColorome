@@ -1,10 +1,19 @@
 This GitHub repository contains the analyses completed as part of a project to complete genomic analysis of carotenoid accumulation in carrots. Analyses include phenotypic data organization,  filtering, outlier removal, and presentation. There are analyses related to genotypic data variant calling, filtering, and formatting. Genomic analysis included population structure, genome-wide association analysis (GWAS), genomic prediction (GP), and producing associated figures. 
 
 A full written description of this project are found in the publication: (TBD) 
-Images of carrot roots and a file genotypic data file from polyRAD is available at [CarrotOmics.org/.](https://carrotomics.org/). 
-Software used in these analysis include: (not an all software listed)
-https://github.com/lvclark/polyRAD
+Images of carrot roots and a file genotypic data file from polyRAD is available at [CarrotOmics](https://carrotomics.org/). 
 
+Software used in these analyses include: 
+[polyRAD]([https://carrotomics.org/](https://github.com/lvclark/polyRAD/) 
+[BGLR](https://github.com/gdlc/BGLR-R/) 
+[fastStructure](https://rajanil.github.io/fastStructure/)
+[qqman](https://github.com/stephenturner/qqman)
+[GAPIT](https://github.com/jiabowang/GAPIT)
+[TASSEL](https://github.com/maize-genetics/tassel-6-source)
+[VCFtools](https://github.com/vcftools)/vcftools)
+[Plink](https://www.cog-genomics.org/plink/
+[Tidyverse](https://www.tidyverse.org/)
+[Haploview](https://www.broadinstitute.org/haploview/haploview)
 
 # Colorome Paper
 Analyses used in publication: ""
