@@ -10,8 +10,8 @@ Software used in these analyses include:
 [qqman](https://github.com/stephenturner/qqman)
 [GAPIT](https://github.com/jiabowang/GAPIT)
 [TASSEL](https://github.com/maize-genetics/tassel-6-source)
-[VCFtools](https://github.com/vcftools)/vcftools)
-[Plink](https://www.cog-genomics.org/plink/
+[VCFtools](https://github.com/vcftools)
+[Plink](https://www.cog-genomics.org/plink/)
 [Tidyverse](https://www.tidyverse.org/)
 [Haploview](https://www.broadinstitute.org/haploview/haploview)
 
