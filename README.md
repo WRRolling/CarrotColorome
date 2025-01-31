@@ -1,5 +1,8 @@
 This GitHub repository houses the analyses conducted for a project investigating the genomic basis of carotenoid accumulation in carrots. The work encompassed phenotypic data management (organization, filtering, outlier removal, visualization), genotypic data processing (variant calling, filtering, formatting), and population-level analyses (population structure, genome-wide association study, genomic prediction, and associated visualizations).
 
+Project Citation:
+Rolling, W. R., Ellison, S., Coe, K., Iorizzo, M., Dawson, J., Senalik, D., & Simon, P. W. (2025). Combining genome-wide association and genomic prediction to unravel the genetic architecture of carotenoid accumulation in carrot. The Plant Genome, 18(1), e20560. https://doi.org/10.1002/tpg2.20560
+
 --------------------------------------------------------------------------
 A full written description of this project can be found in the following publication: (TBD) 
 
